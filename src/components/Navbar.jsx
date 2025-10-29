@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom"; // ✅ Import Link
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,12 +13,12 @@ const Navbar = () => {
         <div className="flex justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <Link
-              to="/"
-              className="text-xl font-bold text-blue-600"
-              onClick={closeMenu}
-            >
-              MyLogo
+            <Link to="/" onClick={closeMenu} className="flex items-center">
+              <img
+                src="/Logo.jpg" // put your logo in public/logo.png
+                alt="Logo"
+                className="h-16 w-full" // adjust height as needed
+              />
             </Link>
           </div>
 
@@ -31,7 +31,7 @@ const Navbar = () => {
               About
             </Link>
             <Link to="/services" className="text-gray-700 hover:text-blue-600">
-              Services
+              Blog
             </Link>
             <Link to="/contact" className="text-gray-700 hover:text-blue-600">
               Contact

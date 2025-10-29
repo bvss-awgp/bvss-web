@@ -32,6 +32,7 @@ const Body = () => {
           <h1 className="text-5xl font-extrabold mb-4">
             Brahmarishi Vishwamitr Research Center
           </h1>
+          <h3 className="text-3xl font-extrabold mb-4">All World Gayatri Pariwar </h3>
 
           {/* Smooth Slide Carousel */}
           <div className="overflow-hidden h-6 mb-2 relative">
@@ -66,10 +67,10 @@ const Body = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
           {[
-            { title: "Airport pickup", desc: "We provide escort from the airport to the hotel", icon: "✈️" },
-            { title: "Easy booking", desc: "Quick and easy booking of tours for upcoming dates", icon: "🗓️" },
-            { title: "Best tour guide", desc: "Our best tour guide is ready to guide your trip", icon: "🧭" },
-            { title: "Lots of promos", desc: "Various promotions and drawings of tours", icon: "🎁" },
+            { title: "Research on Scientific Spirituality", desc: "Higher-level research on Gayatri Mantra and the scientific effects of Yagya.", icon: "🔬" },
+            { title: "Yagyopathy", desc: "yagya is a principle of selfless sacrifice and divine wisdom, teaching one to live a life of virtue, wisdom, and service to others", icon: "🔥" },
+            { title: "Ayurveda", desc: "The life transforming traditions of Vedic Rishi’s are revived here.", icon: "🌱" },
+            { title: "Self Transformation", desc: "Qualitative Changes in Society ", icon: "🌞" },
           ].map((item, i) => (
             <div key={i} className="flex flex-col items-center text-center">
               <div className="text-4xl mb-3">{item.icon}</div>
