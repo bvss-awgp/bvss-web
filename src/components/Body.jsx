@@ -51,7 +51,7 @@ const Body = () => {
           </div>
 
           <button className="bg-white text-black px-8 py-3 mt-5 rounded-full font-semibold hover:bg-gray-200 transition transform hover:scale-105">
-            Book now
+            Contribute Now
           </button>
         </div>
       </section>
@@ -84,7 +84,7 @@ const Body = () => {
       {/* Tour Section */}
     <section className="py-16 px-6 bg-white">
   <h2 className="text-3xl font-bold text-gray-800 text-center mb-10">
-    Our Recent Researches 
+    Our Recent Researche Overviews 
   </h2>
 
   <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
