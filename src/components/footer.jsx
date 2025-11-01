@@ -8,10 +8,9 @@ const Footer = () => {
         
         {/* Logo + About */}
         <div>
-          <h2 className="text-2xl font-bold text-white mb-3">MyLogo</h2>
+          <h2 className="text-2xl font-bold text-white mb-3">Brahmarishi Vishwamitra Research Center</h2>
           <p className="text-sm leading-6">
-            Building modern web experiences with React and Tailwind.  
-            Clean. Fast. Responsive.
+          Brahmarishi Vishwamitra Research Center is a spiritual and intellectual initiative dedicated to bridging ancient wisdom with modern science. It focuses on research, innovation, and social transformation through the principles of Gayatri philosophy and scientific spirituality.
           </p>
         </div>
 
@@ -21,7 +20,8 @@ const Footer = () => {
           <ul className="space-y-2">
             <li><a href="#" className="hover:text-blue-500 transition">Home</a></li>
             <li><a href="#" className="hover:text-blue-500 transition">About</a></li>
-            <li><a href="#" className="hover:text-blue-500 transition">Services</a></li>
+            <li><a href="#" className="hover:text-blue-500 transition">AWGP Mission</a></li>
+             <li><a href="#" className="hover:text-blue-500 transition">Contribute</a></li>
             <li><a href="#" className="hover:text-blue-500 transition">Contact</a></li>
           </ul>
         </div>
@@ -54,7 +54,7 @@ const Footer = () => {
 
       {/* Copyright Bar */}
       <div className="text-center py-4 text-sm text-gray-400">
-        © {new Date().getFullYear()} MyLogo. All rights reserved.
+        © {new Date().getFullYear()} BVSS. All rights reserved.
       </div>
     </footer>
   );
