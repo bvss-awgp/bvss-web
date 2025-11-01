@@ -65,12 +65,14 @@ const Body = () => {
           Try a variety of benefits when using our services
         </p>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 max-w-5xl mx-auto">
           {[
             { title: "Research on Scientific Spirituality", desc: "Higher-level research on Gayatri Mantra and the scientific effects of Yagya.", icon: "🔬" },
             { title: "Yagyopathy", desc: "yagya is a principle of selfless sacrifice and divine wisdom, teaching one to live a life of virtue, wisdom, and service to others", icon: "🔥" },
             { title: "Ayurveda", desc: "The life transforming traditions of Vedic Rishi’s are revived here.", icon: "🌱" },
             { title: "Self Transformation", desc: "Qualitative Changes in Society ", icon: "🌞" },
+            { title: "Education Reform", desc: "Education should not just be for earning a living, but for living a life.", icon: "📚" },
+
           ].map((item, i) => (
             <div key={i} className="flex flex-col items-center text-center">
               <div className="text-4xl mb-3">{item.icon}</div>

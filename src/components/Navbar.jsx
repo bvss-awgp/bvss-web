@@ -15,9 +15,9 @@ const Navbar = () => {
           <div className="flex items-center">
             <Link to="/" onClick={closeMenu} className="flex items-center">
               <img
-                src="/Logo.jpg" // put your logo in public/logo.png
+                src="/Logo.jpg"
                 alt="Logo"
-                className="h-16 w-full" // adjust height as needed
+                className="h-15 w-full"
               />
             </Link>
           </div>
@@ -30,15 +30,19 @@ const Navbar = () => {
             <Link to="/about" className="text-gray-700 hover:text-blue-600">
               About
             </Link>
-            <Link to="/services" className="text-gray-700 hover:text-blue-600">
+            <Link to="/blog" className="text-gray-700 hover:text-blue-600">
               Blog
             </Link>
             <Link to="/contact" className="text-gray-700 hover:text-blue-600">
               Contact
             </Link>
-            <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+            {/* Sign In Button with Link */}
+            <Link
+              to="/signin"
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+            >
               Sign In
-            </button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -112,9 +116,14 @@ const Navbar = () => {
           >
             Contact
           </Link>
-          <button className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+          {/* Mobile Sign In */}
+          <Link
+            to="/signin"
+            className="block w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition text-center"
+            onClick={closeMenu}
+          >
             Sign In
-          </button>
+          </Link>
         </div>
       )}
     </nav>
