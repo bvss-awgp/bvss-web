@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Signin = () => {
   const [isSignUp, setIsSignUp] = useState(false); // state to toggle forms
@@ -84,6 +85,17 @@ const Signin = () => {
           >
             {isSignUp ? "Sign Up" : "Login"}
           </button>
+
+          {isSignUp && (
+            <div className="text-center">
+              <Link
+                to="/contribute"
+                className="inline-block w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-semibold py-2 rounded-lg transition shadow-lg hover:shadow-xl transform hover:scale-105"
+              >
+                Join as Volunteer
+              </Link>
+            </div>
+          )}
 
           <p className="text-center text-gray-600 text-sm">
             {isSignUp ? "Already have an account?" : "New User?"}{" "}

@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useLanguage } from "../contexts/LanguageContext";
 
 const Body = () => {
+  const { t } = useLanguage();
+  
   const carouselTexts = [
-    "Where Science Meets Spiritual Awakening",
-    "Bridging Logic and Consciousness",
-    "Exploring the Mysteries of Consciousness",
-    "Integrating Science with Spiritual Practices",
+    t("home.carousel1"),
+    t("home.carousel2"),
+    t("home.carousel3"),
+    t("home.carousel4"),
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -30,9 +33,9 @@ const Body = () => {
 
         <div className="relative z-10 text-center text-white px-6">
           <h1 className="text-5xl font-extrabold mb-4">
-            Brahmarishi Vishwamitr Research Center
+            {t("home.title")}
           </h1>
-          <h3 className="text-3xl font-extrabold mb-4">All World Gayatri Pariwar </h3>
+          <h3 className="text-3xl font-extrabold mb-4">{t("home.subtitle")}</h3>
 
           {/* Smooth Slide Carousel */}
           <div className="overflow-hidden h-6 mb-2 relative">
@@ -50,28 +53,31 @@ const Body = () => {
             </div>
           </div>
 
-          <button className="bg-white text-black px-8 py-3 mt-5 rounded-full font-semibold hover:bg-gray-200 transition transform hover:scale-105">
-            Contribute Now
-          </button>
+          <a
+            href="/contribute"
+            className="inline-block bg-white text-black px-8 py-3 mt-5 rounded-full font-semibold hover:bg-gray-200 transition transform hover:scale-105"
+          >
+            {t("home.contributeButton")}
+          </a>
         </div>
       </section>
 
       {/* Values Section */}
       <section className="text-center py-16 px-6">
         <h2 className="text-3xl font-bold text-gray-800 mb-2">
-          Top values for you
+          {t("home.valuesTitle")}
         </h2>
         <p className="text-gray-600 mb-12">
-          Try a variety of benefits when using our services
+          {t("home.valuesSubtitle")}
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 max-w-5xl mx-auto">
           {[
-            { title: "Research on Scientific Spirituality", desc: "Higher-level research on Gayatri Mantra and the scientific effects of Yagya.", icon: "🔬" },
-            { title: "Yagyopathy", desc: "yagya is a principle of selfless sacrifice and divine wisdom, teaching one to live a life of virtue, wisdom, and service to others", icon: "🔥" },
-            { title: "Ayurveda", desc: "The life transforming traditions of Vedic Rishi’s are revived here.", icon: "🌱" },
-            { title: "Self Transformation", desc: "Qualitative Changes in Society ", icon: "🌞" },
-            { title: "Education Reform", desc: "Education should not just be for earning a living, but for living a life.", icon: "📚" },
+            { title: t("home.researchTitle"), desc: t("home.researchDesc"), icon: "🔬" },
+            { title: t("home.yagyopathyTitle"), desc: t("home.yagyopathyDesc"), icon: "🔥" },
+            { title: t("home.ayurvedaTitle"), desc: t("home.ayurvedaDesc"), icon: "🌱" },
+            { title: t("home.transformationTitle"), desc: t("home.transformationDesc"), icon: "🌞" },
+            { title: t("home.educationTitle"), desc: t("home.educationDesc"), icon: "📚" },
 
           ].map((item, i) => (
             <div key={i} className="flex flex-col items-center text-center">
@@ -86,7 +92,7 @@ const Body = () => {
       {/* Tour Section */}
     <section className="py-16 px-6 bg-white">
   <h2 className="text-3xl font-bold text-gray-800 text-center mb-10">
-    Our Recent Researche Overviews 
+    {t("home.recentResearch")}
   </h2>
 
   <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
@@ -179,13 +185,13 @@ const Body = () => {
           <h3 className="font-semibold text-lg text-gray-800 mb-1">{tour.title}</h3>
           <p className="text-gray-600 text-sm mb-2">{tour.desc}</p>
           <p className="text-blue-600 font-semibold mb-4">{tour.price}</p>
-          <a
+            <a
             href={tour.youtube}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-auto bg-red-600 text-white px-4 py-2 rounded-full text-center hover:bg-red-700 transition"
           >
-            Watch Now
+            {t("home.watchNow")}
           </a>
         </div>
       </div>
