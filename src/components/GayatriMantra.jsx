@@ -8,12 +8,12 @@ const GayatriMantra = () => {
     // Start fading out after 3 seconds
     const fadeTimer = setTimeout(() => {
       setOpacity(0);
-    }, 3000);
+    }, 1000);
 
     // Remove from DOM after fade out completes
     const removeTimer = setTimeout(() => {
       setIsVisible(false);
-    }, 4000); // 3000ms fade + 1000ms transition
+    }, 2000); // 3000ms fade + 1000ms transition
 
     return () => {
       clearTimeout(fadeTimer);
