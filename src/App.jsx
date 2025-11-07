@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { LanguageProvider } from "./contexts/LanguageContext";
+import { AuthProvider } from "./contexts/AuthContext";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import GayatriMantra from "./components/GayatriMantra";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -33,10 +35,24 @@ const AppContent = () => {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/blog" element={<Blog />} />
           <Route path="/signin" element={<Signin />} />
-          <Route path="/contribute" element={<Contribute />} />
+          <Route
+            path="/contribute"
+            element={
+              <ProtectedRoute>
+                <Contribute />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </main>
       <Footer />
@@ -47,9 +63,11 @@ const AppContent = () => {
 function App() {
   return (
     <LanguageProvider>
-      <Router>
-        <AppContent />
-      </Router>
+      <AuthProvider>
+        <Router>
+          <AppContent />
+        </Router>
+      </AuthProvider>
     </LanguageProvider>
   );
 }

@@ -13,6 +13,8 @@ const Contribute = () => {
     gender: "",
     gayatriPariwarDuration: "",
     akhandJyotiMember: "",
+    guruDiksha: "",
+    missionBooksRead: "",
     researchCategory: "",
     researchTopic: "",
     otherTopic: "",
@@ -155,6 +157,8 @@ const Contribute = () => {
       gender: "",
       gayatriPariwarDuration: "",
       akhandJyotiMember: "",
+      guruDiksha: "",
+      missionBooksRead: "",
       researchCategory: "",
       researchTopic: "",
       otherTopic: "",
@@ -367,6 +371,44 @@ const Contribute = () => {
                       <option value="">{t("contribute.selectOption")}</option>
                       <option value="yes">{t("contribute.yes")}</option>
                       <option value="no">{t("contribute.no")}</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-gray-700 font-semibold mb-2">
+                      {t("contribute.guruDikshaQuestion") || "Have you taken Guru Diksha?"} {" "}
+                      <span className="text-red-500">{t("common.required")}</span>
+                    </label>
+                    <select
+                      name="guruDiksha"
+                      value={formData.guruDiksha}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition bg-white"
+                      required
+                    >
+                      <option value="">{t("contribute.selectOption")}</option>
+                      <option value="yes">{t("contribute.yes")}</option>
+                      <option value="no">{t("contribute.no")}</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-gray-700 font-semibold mb-2">
+                      {t("contribute.missionBooksQuestion") || "How many mission books have you read?"} {" "}
+                      <span className="text-red-500">{t("common.required")}</span>
+                    </label>
+                    <select
+                      name="missionBooksRead"
+                      value={formData.missionBooksRead}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition bg-white"
+                      required
+                    >
+                      <option value="">{t("Select Option")}</option>
+                      {[...Array(10)].map((_, idx) => (
+                        <option key={idx} value={`${idx + 1}`}>
+                          {idx + 1}
+                        </option>
+                      ))}
+                      <option value="10+">10+</option>
                     </select>
                   </div>
                 </div>
