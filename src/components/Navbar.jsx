@@ -70,9 +70,17 @@ const Navbar = () => {
               {t("nav.contact")}
             </Link>
             {isAuthenticated && (
-              <Link to="/contribute" className="text-gray-700 hover:text-blue-600 transition">
-                {t("nav.contribute")}
-              </Link>
+              <>
+                {user?.isAdmin ? (
+                  <Link to="/admin" className="text-gray-700 hover:text-blue-600 transition">
+                    Admin Panel
+                  </Link>
+                ) : (
+                  <Link to="/contribute" className="text-gray-700 hover:text-blue-600 transition">
+                    {t("nav.contribute")}
+                  </Link>
+                )}
+              </>
             )}
             
             {/* Language Selector */}
@@ -319,13 +327,25 @@ const Navbar = () => {
             {t("nav.contact")}
           </Link>
           {isAuthenticated && (
-            <Link
-              to="/contribute"
-              className="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded"
-              onClick={closeMenu}
-            >
-              {t("nav.contribute")}
-            </Link>
+            <>
+              {user?.isAdmin ? (
+                <Link
+                  to="/admin"
+                  className="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded"
+                  onClick={closeMenu}
+                >
+                  Admin Panel
+                </Link>
+              ) : (
+                <Link
+                  to="/contribute"
+                  className="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded"
+                  onClick={closeMenu}
+                >
+                  {t("nav.contribute")}
+                </Link>
+              )}
+            </>
           )}
           
           {/* Mobile Language Selector */}

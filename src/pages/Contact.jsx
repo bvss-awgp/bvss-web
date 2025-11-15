@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLanguage } from "../contexts/LanguageContext";
+import { getApiUrl } from "../Config/api";
 
 const Contact = () => {
   const [isVisible, setIsVisible] = useState({});
@@ -13,6 +14,9 @@ const Contact = () => {
     message: "",
     inquiryType: "research",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [statusMessage, setStatusMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -63,10 +67,41 @@ const Contact = () => {
     requestAnimationFrame(updateCounter);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Thank you for your message! We'll get back to you soon.");
-    setFormData({ name: "", email: "", message: "", inquiryType: "research" });
+    setIsSubmitting(true);
+    setStatusMessage(null);
+    setErrorMessage(null);
+
+    try {
+      var response = await fetch(getApiUrl("/contact"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      var data = null;
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        data = null;
+      }
+
+      if (!response.ok) {
+        var message = data && data.message ? data.message : "Unable to submit message.";
+        throw new Error(message);
+      }
+
+      var successMessage = data && data.message ? data.message : "Thank you for your message! We'll get back to you soon.";
+      setStatusMessage(successMessage);
+      setFormData({ name: "", email: "", message: "", inquiryType: "research" });
+    } catch (error) {
+      setErrorMessage(error.message || "Unable to submit message.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -294,13 +329,21 @@ const Contact = () => {
 
                 <button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex justify-center items-center gap-2"
+                  disabled={isSubmitting}
+                  className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                   </svg>
-                  <span>{t("contact.sendButton")}</span>
+                  <span>{isSubmitting ? "Sending..." : t("contact.sendButton")}</span>
                 </button>
+
+                {statusMessage && (
+                  <p className="text-sm text-green-600 text-center">{statusMessage}</p>
+                )}
+                {errorMessage && (
+                  <p className="text-sm text-red-600 text-center">{errorMessage}</p>
+                )}
 
                 <p className="text-xs text-gray-500 text-center">
                   {t("contact.privacyNote")}

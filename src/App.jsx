@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import GayatriMantra from "./components/GayatriMantra";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./components/AdminRoute";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -13,6 +14,8 @@ import Profile from "./pages/Profile";
 import Blog from "./pages/Blog";
 import Signin from "./pages/Signin";
 import Contribute from "./pages/Contribute";
+import AdminPanel from "./pages/AdminPanel";
+import Repositories from "./pages/Repositories";
 
 // Component to handle route changes and show mantra on each page load
 const AppContent = () => {
@@ -51,6 +54,22 @@ const AppContent = () => {
               <ProtectedRoute>
                 <Contribute />
               </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <AdminPanel />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/repositories"
+            element={
+              <AdminRoute>
+                <Repositories />
+              </AdminRoute>
             }
           />
         </Routes>
