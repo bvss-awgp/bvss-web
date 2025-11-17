@@ -30,7 +30,13 @@
     "educationTitle": "Education Reform",
     "educationDesc": "Education should not just be for earning a living, but for living a life.",
     "recentResearch": "Our Recent Researche Overviews",
-    "watchNow": "Watch Now"
+    "watchNow": "Watch Now",
+    "loadingVideos": "Loading videos...",
+    "videoError": "Unable to load videos. Please try again later.",
+    "noVideos": "No videos available at the moment.",
+    "retry": "Retry",
+    "showAll": "Show All",
+    "showLess": "Show Less"
   },
   "about": {
     "title": "About Us",

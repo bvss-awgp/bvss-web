@@ -62,15 +62,25 @@ const Signin = () => {
   return (
     <div className="flex min-h-screen flex-col lg:flex-row">
       {/* Left Side */}
-      <div className="flex w-full items-center justify-center bg-gradient-to-br from-purple-500 via-purple-400 to-orange-300 px-6 pt-28 pb-12 text-white sm:px-10 sm:pt-32 lg:w-1/2 lg:py-16 lg:pt-0">
-        <div className="max-w-md text-center">
-          <h1 className="text-4xl font-bold sm:text-5xl mb-4">
+      <div className="relative flex w-full items-center justify-center px-6 pt-28 pb-12 sm:px-10 sm:pt-32 lg:w-1/2 lg:py-16 lg:pt-0 overflow-hidden">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/Brahmvarchasv.jpg')" }}
+        >
+          {/* Overlay for better text readability */}
+          <div className="absolute inset-0 bg-black/40"></div>
+        </div>
+        
+        {/* Content */}
+        <div className="relative z-10 max-w-md text-center text-white">
+          <h1 className="text-4xl font-bold sm:text-5xl mb-4 drop-shadow-lg">
             {isSignUp ? "Join Us!" : "Welcome Back!"}
           </h1>
-          <p className="text-base opacity-90 sm:text-lg">
+          <p className="text-base opacity-90 sm:text-lg drop-shadow-md">
             {isSignUp
               ? "Create your account to get started."
-              : "We’re happy to see you again."}
+              : "We're happy to see you again."}
           </p>
         </div>
       </div>
