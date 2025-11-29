@@ -611,7 +611,7 @@ const AdminPanel = () => {
                                     {t("admin.name")}
                                   </div>
                                 </th>
-                                <th className="px-4 sm:px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider hidden sm:table-cell">
+                                <th className="px-4 sm:px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
                                   <div className="flex items-center gap-2">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -619,7 +619,7 @@ const AdminPanel = () => {
                                     {t("admin.phone")}
                                   </div>
                                 </th>
-                                <th className="px-4 sm:px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider hidden md:table-cell">
+                                <th className="px-4 sm:px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
                                   <div className="flex items-center gap-2">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
@@ -662,7 +662,7 @@ const AdminPanel = () => {
                                   <td className="px-4 sm:px-6 py-4 text-sm font-semibold text-gray-900">
                                     {cont.firstName} {cont.lastName}
                                   </td>
-                                  <td className="px-4 sm:px-6 py-4 text-sm text-gray-500 hidden sm:table-cell">
+                                  <td className="px-4 sm:px-6 py-4 text-sm text-gray-500">
                                     <div className="flex items-center gap-2">
                                       {cont.phone ? (
                                         <>
@@ -676,7 +676,7 @@ const AdminPanel = () => {
                                       )}
                                     </div>
                                   </td>
-                                  <td className="px-4 sm:px-6 py-4 text-sm text-gray-500 hidden md:table-cell">
+                                  <td className="px-4 sm:px-6 py-4 text-sm text-gray-500">
                                     <div className="max-w-xs">
                                       {Array.isArray(cont.researchCategories) && cont.researchCategories.length > 0 ? (
                                         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
@@ -775,7 +775,7 @@ const AdminPanel = () => {
                                     {t("admin.name")}
                                   </div>
                                 </th>
-                                <th className="px-4 sm:px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider hidden md:table-cell">
+                                <th className="px-4 sm:px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
                                   <div className="flex items-center gap-2">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
@@ -783,7 +783,7 @@ const AdminPanel = () => {
                                     {t("admin.researchCategories")}
                                   </div>
                                 </th>
-                                <th className="px-4 sm:px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider hidden lg:table-cell">
+                                <th className="px-4 sm:px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
                                   <div className="flex items-center gap-2">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
@@ -826,7 +826,7 @@ const AdminPanel = () => {
                                   <td className="px-4 sm:px-6 py-4 text-sm font-semibold text-gray-900">
                                     {detail.firstName} {detail.lastName}
                                   </td>
-                                  <td className="px-4 sm:px-6 py-4 text-sm text-gray-500 hidden md:table-cell">
+                                  <td className="px-4 sm:px-6 py-4 text-sm text-gray-500">
                                     <div className="max-w-xs">
                                       {Array.isArray(detail.researchCategories) && detail.researchCategories.length > 0 ? (
                                         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
@@ -837,7 +837,7 @@ const AdminPanel = () => {
                                       )}
                                     </div>
                                   </td>
-                                  <td className="px-4 sm:px-6 py-4 text-sm text-gray-500 hidden lg:table-cell">
+                                  <td className="px-4 sm:px-6 py-4 text-sm text-gray-500">
                                     <div className="max-w-xs">
                                       {detail.assignedTopic ? (
                                         <div className="flex flex-col gap-1">
@@ -941,7 +941,7 @@ const AdminPanel = () => {
                                     {t("admin.email")}
                                   </div>
                                 </th>
-                                <th className="px-4 sm:px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider hidden md:table-cell">
+                                <th className="px-4 sm:px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
                                   <div className="flex items-center gap-2">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -992,7 +992,7 @@ const AdminPanel = () => {
                                       <div className="max-w-xs truncate sm:max-w-none sm:truncate-none font-medium">{msg.email}</div>
                                     </div>
                                   </td>
-                                  <td className="px-4 sm:px-6 py-4 text-sm text-gray-500 hidden md:table-cell">
+                                  <td className="px-4 sm:px-6 py-4 text-sm text-gray-500">
                                     <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-pink-100 text-pink-800">
                                       {msg.inquiryType}
                                     </span>
