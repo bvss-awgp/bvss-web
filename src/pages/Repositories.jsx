@@ -23,6 +23,7 @@ const Repositories = () => {
   const [repositoriesError, setRepositoriesError] = useState(null);
   const [updatingStatus, setUpdatingStatus] = useState({});
   const [deletingId, setDeletingId] = useState(null);
+  const [deleteSuccessMessage, setDeleteSuccessMessage] = useState(null);
 
   const researchCategoryOptions = [
     {
@@ -207,30 +208,70 @@ const Repositories = () => {
     }
 
     setDeletingId(repoId);
+    setDeleteSuccessMessage(null);
+    setRepositoriesError(null);
 
     try {
-      const response = await fetch(getApiUrl(`/admin/repositories/${repoId}`), {
+      console.log("Deleting topic with ID:", repoId);
+      const apiUrl = getApiUrl(`/admin/repositories/${repoId}`);
+      console.log("Delete API URL:", apiUrl);
+
+      const response = await fetch(apiUrl, {
         method: "DELETE",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       });
 
-      const data = await response.json().catch(() => null);
+      console.log("Delete response status:", response.status);
+
+      // Read response as text first to handle errors
+      let responseText = "";
+      try {
+        responseText = await response.text();
+        console.log("Delete response text:", responseText);
+      } catch (readError) {
+        console.error("Error reading response:", readError);
+        throw new Error("Failed to read server response.");
+      }
+
+      // Check if response is HTML (server error page)
+      const trimmedText = responseText.trim();
+      if (trimmedText.toLowerCase().startsWith("<!doctype") || 
+          trimmedText.toLowerCase().startsWith("<html") ||
+          trimmedText.startsWith("<")) {
+        console.error("HTML response detected:", responseText.substring(0, 500));
+        throw new Error("Server error: Received HTML instead of JSON. Please check backend server.");
+      }
+
+      // Parse JSON
+      let data = null;
+      try {
+        if (trimmedText.length === 0) {
+          throw new Error("Server returned an empty response.");
+        }
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error("JSON parse error:", parseError);
+        console.error("Response was:", responseText.substring(0, 500));
+        throw new Error("Server returned invalid JSON. Please check backend server logs.");
+      }
 
       if (!response.ok) {
-        throw new Error(data?.message || "Unable to delete topic.");
+        throw new Error(data?.message || `Server error (Status: ${response.status}). Unable to delete topic.`);
       }
 
       // Remove the repository from the local state
       setRepositories((prev) => prev.filter((repo) => repo._id !== repoId));
       
-      // Show success message
-      setSuccessMessage(data?.message || t("repository.topicDeletedSuccess") || "Topic deleted successfully.");
-      setTimeout(() => setSuccessMessage(null), 3000);
+      // Show success message in show-topic tab
+      setDeleteSuccessMessage(data?.message || t("repository.topicDeletedSuccess") || "Topic deleted successfully.");
+      setTimeout(() => setDeleteSuccessMessage(null), 5000);
     } catch (error) {
       console.error("Failed to delete topic:", error);
-      alert(error.message || "Unable to delete topic.");
+      setRepositoriesError(error.message || "Unable to delete topic. Please try again.");
+      alert(error.message || "Unable to delete topic. Please check the console for details.");
     } finally {
       setDeletingId(null);
     }
@@ -468,6 +509,17 @@ const Repositories = () => {
                   ))}
                 </select>
               </div>
+
+              {deleteSuccessMessage && (
+                <div className="mb-6 bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-500 rounded-lg p-4 shadow-sm animate-fade-in">
+                  <div className="flex items-center gap-2">
+                    <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <p className="text-green-700 font-medium">{deleteSuccessMessage}</p>
+                  </div>
+                </div>
+              )}
 
               {repositoriesError && (
                 <div className="mb-6 bg-gradient-to-r from-red-50 to-pink-50 border-l-4 border-red-500 rounded-lg p-4 shadow-sm">
