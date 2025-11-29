@@ -11,6 +11,23 @@ const BlogMagazine = () => {
 
   // Intersection Observer for animations
   useEffect(() => {
+    // Initialize visibility when blogs load
+    if (blogs.length > 0 && !loading) {
+      setIsVisible((prev) => ({
+        ...prev,
+        hero: prev.hero !== undefined ? prev.hero : true,
+        categories: prev.categories !== undefined ? prev.categories : true,
+        articles: prev.articles !== undefined ? prev.articles : true,
+      }));
+    }
+  }, [blogs.length, loading]);
+
+  useEffect(() => {
+    // Only set up observer after blogs are loaded
+    if (blogs.length === 0) {
+      return;
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -22,11 +39,17 @@ const BlogMagazine = () => {
       { threshold: 0.1 }
     );
 
-    const elements = document.querySelectorAll("[data-animate]");
-    elements.forEach((el) => observer.observe(el));
+    // Small delay to ensure DOM is ready after blogs load
+    const timeoutId = setTimeout(() => {
+      const elements = document.querySelectorAll("[data-animate]");
+      elements.forEach((el) => observer.observe(el));
+    }, 200);
 
-    return () => observer.disconnect();
-  }, []);
+    return () => {
+      clearTimeout(timeoutId);
+      observer.disconnect();
+    };
+  }, [blogs.length]);
 
   // Build API URL with category filter
   const apiUrl = useMemo(() => {
@@ -237,7 +260,7 @@ const BlogMagazine = () => {
       >
         <div 
           className={`flex flex-wrap justify-center gap-4 transform transition-all duration-700 ${
-            isVisible.categories ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+            isVisible.categories !== false ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
           {categories.map((category, idx) => (
@@ -260,7 +283,7 @@ const BlogMagazine = () => {
       <section 
         className="max-w-7xl mx-auto px-6 mt-16"
         data-animate
-        id="articles"
+        id="articles-section"
       >
         <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">
           {t("blog.latestArticles") || "Latest Articles"}
@@ -281,9 +304,9 @@ const BlogMagazine = () => {
             <article
               key={post.id || post.slug}
               className={`bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:scale-105 hover:-translate-y-2 group ${
-                isVisible.articles ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+                isVisible.articles !== false ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
               }`}
-              style={{ transitionDelay: `${idx * 100}ms` }}
+              style={{ transitionDelay: `${idx * 50}ms` }}
             >
               <Link to={`/blog/${post.slug}`}>
               <div className="relative overflow-hidden">
