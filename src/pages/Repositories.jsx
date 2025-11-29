@@ -22,6 +22,7 @@ const Repositories = () => {
   const [isLoadingRepositories, setIsLoadingRepositories] = useState(false);
   const [repositoriesError, setRepositoriesError] = useState(null);
   const [updatingStatus, setUpdatingStatus] = useState({});
+  const [deletingId, setDeletingId] = useState(null);
 
   const researchCategoryOptions = [
     {
@@ -197,6 +198,41 @@ const Repositories = () => {
         delete updated[repoId];
         return updated;
       });
+    }
+  };
+
+  const handleDelete = async (repoId) => {
+    if (!window.confirm(t("repository.confirmDelete") || "Are you sure you want to delete this topic? This action cannot be undone.")) {
+      return;
+    }
+
+    setDeletingId(repoId);
+
+    try {
+      const response = await fetch(getApiUrl(`/admin/repositories/${repoId}`), {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(data?.message || "Unable to delete topic.");
+      }
+
+      // Remove the repository from the local state
+      setRepositories((prev) => prev.filter((repo) => repo._id !== repoId));
+      
+      // Show success message
+      setSuccessMessage(data?.message || t("repository.topicDeletedSuccess") || "Topic deleted successfully.");
+      setTimeout(() => setSuccessMessage(null), 3000);
+    } catch (error) {
+      console.error("Failed to delete topic:", error);
+      alert(error.message || "Unable to delete topic.");
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -500,6 +536,14 @@ const Repositories = () => {
                                   {t("repository.status")}
                                 </div>
                               </th>
+                              <th className="px-4 sm:px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
+                                <div className="flex items-center gap-2">
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                  </svg>
+                                  {t("repository.actions") || "Actions"}
+                                </div>
+                              </th>
                               <th className="px-4 sm:px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider hidden sm:table-cell">
                                 <div className="flex items-center gap-2">
                                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -558,6 +602,31 @@ const Repositories = () => {
                                             </svg>
                                           )}
                                           {status === 'Complete' ? t("repository.complete") : t("repository.incomplete")}
+                                        </>
+                                      )}
+                                    </button>
+                                  </td>
+                                  <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                                    <button
+                                      onClick={() => handleDelete(repo._id)}
+                                      disabled={deletingId === repo._id}
+                                      className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-white bg-gradient-to-r from-red-600 to-rose-700 rounded-lg hover:from-red-700 hover:to-rose-800 transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                                      title={t("repository.deleteTopic") || "Delete topic"}
+                                    >
+                                      {deletingId === repo._id ? (
+                                        <>
+                                          <svg className="animate-spin h-3 w-3" fill="none" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                          </svg>
+                                          <span>{t("repository.deleting") || "Deleting..."}</span>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                          </svg>
+                                          <span>{t("repository.delete") || "Delete"}</span>
                                         </>
                                       )}
                                     </button>
