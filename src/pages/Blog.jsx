@@ -5,25 +5,66 @@ import { getApiUrl } from "../Config/api";
 import useSWR from "swr";
 
 const BlogMagazine = () => {
-  const [isVisible, setIsVisible] = useState({});
+  const [isVisible, setIsVisible] = useState({
+    hero: true,
+    categories: true,
+    articles: true,
+  });
   const [selectedCategory, setSelectedCategory] = useState("All");
   const { t } = useLanguage();
 
-  // Intersection Observer for animations
-  useEffect(() => {
-    // Initialize visibility when blogs load
-    if (blogs.length > 0 && !loading) {
-      setIsVisible((prev) => ({
-        ...prev,
-        hero: prev.hero !== undefined ? prev.hero : true,
-        categories: prev.categories !== undefined ? prev.categories : true,
-        articles: prev.articles !== undefined ? prev.articles : true,
-      }));
-    }
-  }, [blogs.length, loading]);
+  // Build API URL with category filter
+  const apiUrl = useMemo(() => {
+    const category = selectedCategory === "All" ? null : selectedCategory;
+    return getApiUrl(`/blogs${category ? `?category=${encodeURIComponent(category)}` : ''}`);
+  }, [selectedCategory]);
 
+  // Fetcher function for SWR
+  const fetcher = async (url) => {
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text().catch(() => 'Unknown error');
+        console.error('Blog fetch error:', response.status, errorText);
+        const error = new Error("Unable to fetch blogs. Please try again later.");
+        error.status = response.status;
+        throw error;
+      }
+
+      const data = await response.json();
+      console.log('Blogs fetched successfully:', data.blogs?.length || 0, 'blogs');
+      return data.blogs || [];
+    } catch (error) {
+      console.error('Fetcher error:', error);
+      throw error;
+    }
+  };
+
+  // Use SWR for data fetching with optimized caching
+  const {
+    data: blogs = [],
+    error,
+    isLoading: loading,
+    mutate,
+  } = useSWR(apiUrl, fetcher, {
+    revalidateOnFocus: false, // Don't refetch on focus for better performance
+    revalidateOnReconnect: true, // Revalidate when network reconnects
+    refreshInterval: 0, // Disable auto-refresh for better performance
+    errorRetryCount: 2, // Reduce retries
+    errorRetryInterval: 3000, // Wait 3 seconds between retries
+    dedupingInterval: 5000, // Dedupe requests within 5 seconds
+    keepPreviousData: true, // Keep previous data while loading new
+    focusThrottleInterval: 60000, // Throttle focus revalidation to 1 minute
+  });
+
+  // Intersection Observer for animations - runs after blogs are loaded
   useEffect(() => {
-    // Only set up observer after blogs are loaded
     if (blogs.length === 0) {
       return;
     }
@@ -43,55 +84,13 @@ const BlogMagazine = () => {
     const timeoutId = setTimeout(() => {
       const elements = document.querySelectorAll("[data-animate]");
       elements.forEach((el) => observer.observe(el));
-    }, 200);
+    }, 100);
 
     return () => {
       clearTimeout(timeoutId);
       observer.disconnect();
     };
   }, [blogs.length]);
-
-  // Build API URL with category filter
-  const apiUrl = useMemo(() => {
-    const category = selectedCategory === "All" ? null : selectedCategory;
-    return getApiUrl(`/blogs${category ? `?category=${encodeURIComponent(category)}` : ''}`);
-  }, [selectedCategory]);
-
-  // Fetcher function for SWR
-  const fetcher = async (url) => {
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      const error = new Error("Unable to fetch blogs. Please try again later.");
-      error.status = response.status;
-      throw error;
-    }
-
-    const data = await response.json();
-    return data.blogs || [];
-  };
-
-  // Use SWR for data fetching with optimized caching
-  const {
-    data: blogs = [],
-    error,
-    isLoading: loading,
-    mutate,
-  } = useSWR(apiUrl, fetcher, {
-    revalidateOnFocus: false, // Don't refetch on focus for better performance
-    revalidateOnReconnect: true, // Revalidate when network reconnects
-    refreshInterval: 0, // Disable auto-refresh for better performance
-    errorRetryCount: 2, // Reduce retries
-    errorRetryInterval: 3000, // Wait 3 seconds between retries
-    dedupingInterval: 5000, // Dedupe requests within 5 seconds
-    keepPreviousData: true, // Keep previous data while loading new
-    focusThrottleInterval: 60000, // Throttle focus revalidation to 1 minute
-  });
 
   // Format date for display
   const formatDate = (dateString) => {
@@ -207,7 +206,7 @@ const BlogMagazine = () => {
           >
           <div 
             className={`max-w-4xl w-full transform transition-all duration-1000 ${
-              isVisible.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+              isVisible.hero !== false ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
             }`}
           >
             <div className="inline-block mb-2 sm:mb-4">
@@ -303,9 +302,7 @@ const BlogMagazine = () => {
             otherPosts.map((post, idx) => (
             <article
               key={post.id || post.slug}
-              className={`bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:scale-105 hover:-translate-y-2 group ${
-                isVisible.articles !== false ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-              }`}
+              className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:scale-105 hover:-translate-y-2 group opacity-100"
               style={{ transitionDelay: `${idx * 50}ms` }}
             >
               <Link to={`/blog/${post.slug}`}>
