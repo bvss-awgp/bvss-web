@@ -679,9 +679,13 @@ const AdminPanel = () => {
                                   <td className="px-4 sm:px-6 py-4 text-sm text-gray-500">
                                     <div className="max-w-xs">
                                       {Array.isArray(cont.researchCategories) && cont.researchCategories.length > 0 ? (
-                                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
-                                          {cont.researchCategories.join(", ")}
-                                        </span>
+                                        <div className="flex flex-wrap gap-1.5">
+                                          {cont.researchCategories.map((category, idx) => (
+                                            <span key={idx} className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 whitespace-nowrap">
+                                              {category}
+                                            </span>
+                                          ))}
+                                        </div>
                                       ) : (
                                         <span className="text-gray-400">{t("admin.notAvailable")}</span>
                                       )}
@@ -829,9 +833,13 @@ const AdminPanel = () => {
                                   <td className="px-4 sm:px-6 py-4 text-sm text-gray-500">
                                     <div className="max-w-xs">
                                       {Array.isArray(detail.researchCategories) && detail.researchCategories.length > 0 ? (
-                                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                                          {detail.researchCategories.join(", ")}
-                                        </span>
+                                        <div className="flex flex-wrap gap-1.5">
+                                          {detail.researchCategories.map((category, idx) => (
+                                            <span key={idx} className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 whitespace-nowrap">
+                                              {category}
+                                            </span>
+                                          ))}
+                                        </div>
                                       ) : (
                                         <span className="text-gray-400">{t("admin.notAvailable")}</span>
                                       )}
