@@ -386,7 +386,7 @@ const Navbar = () => {
                     onClick={closeMenu}
                     className="mt-1 inline-flex text-xs text-blue-600 hover:underline"
                   >
-                    {t("nav.viewProfile") || "View Profile"}
+                    {t("View Profile")}
                   </Link>
                 </div>
               </div>
