@@ -13,6 +13,8 @@ const BlogDetail = () => {
   const [commentText, setCommentText] = useState("");
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const [commentError, setCommentError] = useState("");
+  const [isLiking, setIsLiking] = useState(false);
+  const [likeError, setLikeError] = useState("");
 
   // Fetcher function for SWR with auth token
   const fetcher = async (url) => {
@@ -92,24 +94,61 @@ const BlogDetail = () => {
       return;
     }
 
+    if (!token) {
+      console.error("No authentication token available");
+      setLikeError("Authentication required. Please sign in again.");
+      navigate("/signin", { state: { from: `/blog/${slug}` } });
+      return;
+    }
+
+    setIsLiking(true);
+    setLikeError("");
+
     try {
       const method = blog?.userLiked ? "DELETE" : "POST";
-      const response = await fetch(getApiUrl(`/blogs/${slug}/like`), {
+      const url = getApiUrl(`/blogs/${slug}/like`);
+      
+      console.log(`🔄 ${method} ${url}`);
+      console.log('Blog userLiked:', blog?.userLiked);
+      console.log('Token present:', !!token);
+      
+      const response = await fetch(url, {
         method: method,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+        credentials: "include",
       });
 
+      console.log('Response status:', response.status, response.statusText);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
       if (!response.ok) {
-        throw new Error("Failed to like/unlike blog");
+        let errorData;
+        try {
+          const text = await response.text();
+          console.log('Error response text:', text);
+          errorData = text ? JSON.parse(text) : { message: "Failed to like/unlike blog" };
+        } catch (parseError) {
+          console.error("Error parsing error response:", parseError);
+          errorData = { message: `Server error: ${response.status} ${response.statusText}` };
+        }
+        console.error("Like error response:", errorData);
+        throw new Error(errorData.message || "Failed to like/unlike blog");
       }
 
+      const data = await response.json().catch(() => ({}));
+      console.log('Like success:', data);
+
       // Refresh blog data to get updated like count
-      mutate();
+      await mutate();
+      setLikeError("");
     } catch (error) {
       console.error("Like error:", error);
+      setLikeError(error.message || "Failed to like/unlike blog. Please try again.");
+    } finally {
+      setIsLiking(false);
     }
   };
 
@@ -394,29 +433,62 @@ const BlogDetail = () => {
         <div className="mt-8 bg-[#fefcf9] rounded-lg shadow-lg border border-[#e8ddd4] p-6">
           <button
             onClick={handleLike}
+            disabled={isLiking}
             className={`flex items-center gap-3 px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
               blog.userLiked
                 ? "bg-red-600 text-white hover:bg-red-700 shadow-md"
                 : "bg-[#e8ddd4] text-[#6b5b47] hover:bg-[#d4c5b0]"
-            }`}
+            } disabled:opacity-50 disabled:cursor-not-allowed`}
           >
-            <svg
-              className={`w-6 h-6 ${blog.userLiked ? "fill-current" : ""}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-              />
-            </svg>
-            <span>
-              {blog.userLiked ? "Liked" : "Like"} ({blog.likeCount || 0})
-            </span>
+            {isLiking ? (
+              <>
+                <svg
+                  className="animate-spin h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                <span>Processing...</span>
+              </>
+            ) : (
+              <>
+                <svg
+                  className={`w-6 h-6 ${blog.userLiked ? "fill-current" : ""}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  />
+                </svg>
+                <span>
+                  {blog.userLiked ? "Liked" : "Like"} ({blog.likeCount || 0})
+                </span>
+              </>
+            )}
           </button>
+          {likeError && (
+            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-red-700 text-sm">{likeError}</p>
+            </div>
+          )}
         </div>
 
         {/* Comments Section */}
