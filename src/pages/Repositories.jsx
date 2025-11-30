@@ -747,7 +747,7 @@ const Repositories = () => {
                                       onClick={() => handleDelete(repo._id)}
                                       disabled={deletingId === repo._id}
                                       className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-white bg-gradient-to-r from-red-600 to-rose-700 rounded-lg hover:from-red-700 hover:to-rose-800 transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                                      title={t("repository.deleteTopic") || "Delete topic"}
+                                      title={t("Delete Topic")}
                                     >
                                       {deletingId === repo._id ? (
                                         <>
