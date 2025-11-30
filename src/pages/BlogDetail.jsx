@@ -87,16 +87,9 @@ const BlogDetail = () => {
     }
   );
 
-  // Handle like/unlike
+  // Handle like/unlike - simple toggle
   const handleLike = async () => {
-    if (!isAuthenticated) {
-      navigate("/signin", { state: { from: `/blog/${slug}` } });
-      return;
-    }
-
-    if (!token) {
-      console.error("No authentication token available");
-      setLikeError("Authentication required. Please sign in again.");
+    if (!isAuthenticated || !token) {
       navigate("/signin", { state: { from: `/blog/${slug}` } });
       return;
     }
@@ -105,12 +98,9 @@ const BlogDetail = () => {
     setLikeError("");
 
     try {
+      // Simple toggle: if liked, unlike it; if not liked, like it
       const method = blog?.userLiked ? "DELETE" : "POST";
       const url = getApiUrl(`/blogs/${slug}/like`);
-      
-      console.log(`🔄 ${method} ${url}`);
-      console.log('Blog userLiked:', blog?.userLiked);
-      console.log('Token present:', !!token);
       
       const response = await fetch(url, {
         method: method,
@@ -118,48 +108,14 @@ const BlogDetail = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        credentials: "include",
       });
 
-      console.log('Response status:', response.status, response.statusText);
-      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
-
       if (!response.ok) {
-        let errorData;
-        try {
-          const text = await response.text();
-          console.log('Error response text:', text);
-          errorData = text ? JSON.parse(text) : { message: "Failed to like/unlike blog" };
-        } catch (parseError) {
-          console.error("Error parsing error response:", parseError);
-          errorData = { message: `Server error: ${response.status} ${response.statusText}` };
-        }
-        console.error("Like error response:", errorData);
-        
-        // If we get 400 "already liked" when trying to POST, it means the state was out of sync
-        // Refresh the blog data to get the correct state
-        if (response.status === 400 && (errorData.code === 'ALREADY_LIKED' || (errorData.message && errorData.message.includes('already liked')))) {
-          console.log('🔄 State mismatch detected - refreshing blog data');
-          await mutate();
-          setLikeError(""); // Clear error since we're fixing it
-          return; // Exit early, state is now correct
-        }
-        
-        // If we get 404 "Like not found" when trying to DELETE, also refresh
-        if (response.status === 404 && errorData.message && errorData.message.includes('Like not found')) {
-          console.log('🔄 Like not found - refreshing blog data');
-          await mutate();
-          setLikeError(""); // Clear error since we're fixing it
-          return; // Exit early, state is now correct
-        }
-        
+        const errorData = await response.json().catch(() => ({ message: "Failed to like/unlike blog" }));
         throw new Error(errorData.message || "Failed to like/unlike blog");
       }
 
-      const data = await response.json().catch(() => ({}));
-      console.log('Like success:', data);
-
-      // Refresh blog data to get updated like count
+      // Refresh blog data to update like count and status
       await mutate();
       setLikeError("");
     } catch (error) {
