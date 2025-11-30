@@ -88,6 +88,7 @@ const Signin = () => {
     try {
       if (isSignUp) {
         // Call OTP send endpoint
+        console.log('🚀 Sending OTP request to:', getApiUrl("/otp/send"));
         const response = await fetch(getApiUrl("/otp/send"), {
           method: "POST",
           headers: {
@@ -100,34 +101,29 @@ const Signin = () => {
             password: password,
           }),
         });
-
-        // Check content type before parsing JSON
-        let data;
         
+        console.log('📨 Response status:', response.status, response.statusText);
+        console.log('📨 Response headers:', Object.fromEntries(response.headers.entries()));
+
+        // Parse response - can only read body once
+        let data;
         try {
-          const contentType = response.headers.get("content-type");
-          
-          if (contentType && contentType.includes("application/json")) {
-            const text = await response.text();
-            if (text) {
-              data = JSON.parse(text);
-            } else {
-              data = {};
-            }
-          } else {
-            // If not JSON, try to get text and parse it
-            const text = await response.text();
+          const text = await response.text();
+          console.log('📨 Response text:', text);
+          if (text) {
             try {
               data = JSON.parse(text);
             } catch (parseError) {
-              // If still can't parse, create error object
+              console.error("Error parsing JSON:", parseError);
               data = {
-                message: text || "Unable to send verification code. Please try again.",
+                message: text || "Invalid response from server. Please try again.",
               };
             }
+          } else {
+            data = {};
           }
         } catch (parseError) {
-          console.error("Error parsing response:", parseError);
+          console.error("Error reading response:", parseError);
           data = {
             message: "Invalid response from server. Please try again.",
           };
