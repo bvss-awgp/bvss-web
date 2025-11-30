@@ -135,6 +135,24 @@ const BlogDetail = () => {
           errorData = { message: `Server error: ${response.status} ${response.statusText}` };
         }
         console.error("Like error response:", errorData);
+        
+        // If we get 400 "already liked" when trying to POST, it means the state was out of sync
+        // Refresh the blog data to get the correct state
+        if (response.status === 400 && (errorData.code === 'ALREADY_LIKED' || (errorData.message && errorData.message.includes('already liked')))) {
+          console.log('🔄 State mismatch detected - refreshing blog data');
+          await mutate();
+          setLikeError(""); // Clear error since we're fixing it
+          return; // Exit early, state is now correct
+        }
+        
+        // If we get 404 "Like not found" when trying to DELETE, also refresh
+        if (response.status === 404 && errorData.message && errorData.message.includes('Like not found')) {
+          console.log('🔄 Like not found - refreshing blog data');
+          await mutate();
+          setLikeError(""); // Clear error since we're fixing it
+          return; // Exit early, state is now correct
+        }
+        
         throw new Error(errorData.message || "Failed to like/unlike blog");
       }
 
