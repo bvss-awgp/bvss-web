@@ -88,71 +88,90 @@ const Signin = () => {
     try {
       if (isSignUp) {
         // Call OTP send endpoint
-        console.log('🚀 Sending OTP request to:', getApiUrl("/otp/send"));
-        const response = await fetch(getApiUrl("/otp/send"), {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            name: name.trim(),
-            email: email.toLowerCase().trim(),
-            password: password,
-          }),
-        });
+        const apiUrl = getApiUrl("/otp/send");
+        const requestBody = {
+          name: name.trim(),
+          email: email.toLowerCase().trim(),
+          password: password,
+        };
         
-        console.log('📨 Response status:', response.status, response.statusText);
-        console.log('📨 Response headers:', Object.fromEntries(response.headers.entries()));
-
-        // Parse response - can only read body once
-        let data;
+        console.log('🚀 Sending OTP request to:', apiUrl);
+        console.log('📦 Request body:', { ...requestBody, password: '***' });
+        
         try {
-          const text = await response.text();
-          console.log('📨 Response text:', text);
-          if (text) {
-            try {
-              data = JSON.parse(text);
-            } catch (parseError) {
-              console.error("Error parsing JSON:", parseError);
-              data = {
-                message: text || "Invalid response from server. Please try again.",
-              };
+          const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify(requestBody),
+          });
+          
+          console.log('📨 Response received - Status:', response.status, response.statusText);
+          console.log('📨 Response headers:', Object.fromEntries(response.headers.entries()));
+          
+          if (!response.ok) {
+            console.error('❌ Response not OK:', response.status, response.statusText);
+          }
+
+          // Parse response - can only read body once
+          let data;
+          try {
+            const text = await response.text();
+            console.log('📨 Response text:', text);
+            if (text) {
+              try {
+                data = JSON.parse(text);
+                console.log('✅ Parsed response data:', data);
+              } catch (parseError) {
+                console.error("❌ Error parsing JSON:", parseError);
+                data = {
+                  message: text || "Invalid response from server. Please try again.",
+                };
+              }
+            } else {
+              console.warn('⚠️ Empty response body');
+              data = {};
             }
-          } else {
-            data = {};
+          } catch (parseError) {
+            console.error("❌ Error reading response:", parseError);
+            data = {
+              message: "Invalid response from server. Please try again.",
+            };
           }
-        } catch (parseError) {
-          console.error("Error reading response:", parseError);
-          data = {
-            message: "Invalid response from server. Please try again.",
-          };
-        }
 
-        if (!response.ok) {
-          const errorMessage = data?.message || "Unable to send verification code. Please try again.";
-          
-          // Check for specific error codes
-          if (response.status === 409) {
-            throw new Error("User already exists with this email address.");
+          if (!response.ok) {
+            const errorMessage = data?.message || "Unable to send verification code. Please try again.";
+            console.error('❌ Request failed:', errorMessage);
+            
+            // Check for specific error codes
+            if (response.status === 409) {
+              throw new Error("User already exists with this email address.");
+            }
+            
+            throw new Error(errorMessage);
           }
-          
-          throw new Error(errorMessage);
+
+          // Store email and sessionId for OTP verification page
+          const sessionId = data.sessionId || "";
+          console.log('✅ OTP sent successfully. Session ID:', sessionId);
+          sessionStorage.setItem("otp_email", email.toLowerCase().trim());
+          sessionStorage.setItem("otp_sessionId", sessionId);
+
+          // Navigate to OTP verification page
+          navigate("/otp-verify", {
+            replace: true,
+            state: {
+              email: email.toLowerCase().trim(),
+              sessionId: sessionId,
+            },
+          });
+        } catch (fetchError) {
+          console.error('❌ Fetch error:', fetchError);
+          throw fetchError;
         }
-
-        // Store email and sessionId for OTP verification page
-        const sessionId = data.sessionId || "";
-        sessionStorage.setItem("otp_email", email.toLowerCase().trim());
-        sessionStorage.setItem("otp_sessionId", sessionId);
-
-        // Navigate to OTP verification page
-        navigate("/otp-verify", {
-          replace: true,
-          state: {
-            email: email.toLowerCase().trim(),
-            sessionId: sessionId,
-          },
-        });
       } else {
         await login({ email, password, rememberMe });
         navigate(from, { replace: true });
