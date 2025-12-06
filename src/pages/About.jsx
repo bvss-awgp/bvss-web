@@ -373,9 +373,9 @@ const About = () => {
           {[
             { name: "Mr Vivek Baghel", role: "Founder & Research Lead", image: "/About/vivek.jpg" },
             { name: "Mr Suyash Soni", role: "Software Engineer & Manager", image: "/About/suyash.jpg" },
-            { name: "Prof. Jagriti Kawde", role: "Research Assistant", image: "/About/jagriti.jpg" },
+            { name: "Prof. Jagrati Kawde", role: "Research Assistant", image: "/About/jagriti.jpg" },
             { name: "Dr Vaidehi Puri", role: "Research Assistant", image: "/About/vaidehi.jpg" },
-            { name: "Mrs Prachi Pawar", role: "Research Assistant / Content and Reach", image: "/About/prachi.jpg" },
+            { name: "Mr Pranav Wankhede", role: "Research Assistant", image: "/About/pranav.jpg" },
           ].map((member, idx) => (
             <div 
               key={idx} 
