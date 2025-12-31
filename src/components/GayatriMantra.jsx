@@ -25,14 +25,38 @@ const GayatriMantra = () => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
       style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 9999,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "rgba(0, 0, 0, 0.7)",
         opacity: opacity,
         transition: "opacity 1s ease-out",
       }}
     >
       {/* Simple Spinning Loader */}
-      <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+      <div
+        style={{
+          width: "64px",
+          height: "64px",
+          border: "4px solid #ffffff",
+          borderTop: "4px solid transparent",
+          borderRadius: "50%",
+          animation: "spin 1s linear infinite",
+        }}
+      ></div>
+      <style>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 };
