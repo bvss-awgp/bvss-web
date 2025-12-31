@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import Footer from "./components/footer";
 import GayatriMantra from "./components/GayatriMantra";
 import CookieConsent from "./components/CookieConsent";
 import ProtectedRoute from "./components/ProtectedRoute";
