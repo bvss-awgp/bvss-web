@@ -5,15 +5,15 @@ const GayatriMantra = () => {
   const [opacity, setOpacity] = useState(1);
 
   useEffect(() => {
-    // Start fading out after 1 second
+    // Start fading out after 2 seconds
     const fadeTimer = setTimeout(() => {
       setOpacity(0);
-    }, 1000);
+    }, 2000);
 
     // Remove from DOM after fade out completes
     const removeTimer = setTimeout(() => {
       setIsVisible(false);
-    }, 2000); // 1000ms fade + 1000ms transition
+    }, 3000); // 2000ms visible + 1000ms fade transition
 
     return () => {
       clearTimeout(fadeTimer);
@@ -25,14 +25,14 @@ const GayatriMantra = () => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none bg-black/40 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
       style={{
         opacity: opacity,
         transition: "opacity 1s ease-out",
       }}
     >
       {/* Simple Spinning Loader */}
-      <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
     </div>
   );
 };
