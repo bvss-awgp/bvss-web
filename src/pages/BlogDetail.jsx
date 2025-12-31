@@ -187,6 +187,11 @@ const BlogDetail = () => {
     return `${minutes} min read`;
   };
 
+  // Scroll to top when component mounts or slug changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [slug]);
+
   // Render content with HTML (if content contains HTML)
   const renderContent = (content) => {
     if (!content) return "";

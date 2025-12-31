@@ -32,6 +32,8 @@ const AppContent = () => {
     // Show mantra on route change
     setShowMantra(true);
     setKey((prev) => prev + 1);
+    // Scroll to top on route change (especially important for mobile)
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, [location.pathname]);
 
   return (
