@@ -21,6 +21,8 @@ import Repositories from "./pages/Repositories";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import OTPVerification from "./pages/OTPVerification";
+import ResearchWork from "./pages/ResearchWork";
+import ResearchDetail from "./pages/ResearchDetail";
 
 // Component to handle route changes and show mantra on each page load
 const AppContent = () => {
@@ -44,6 +46,8 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/research-work" element={<ResearchWork />} />
+          <Route path="/research-work/:slug" element={<ResearchDetail />} />
           <Route path="/contact" element={<Contact />} />
           <Route
             path="/profile"

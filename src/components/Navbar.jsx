@@ -61,27 +61,59 @@ const Navbar = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex space-x-6 items-center">
-            <Link to="/" className="text-gray-700 hover:text-blue-600 transition">
+            <Link 
+              to="/" 
+              className="relative text-gray-700 py-2 group"
+            >
               {t("nav.home")}
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
             </Link>
-            <Link to="/about" className="text-gray-700 hover:text-blue-600 transition">
+            <Link 
+              to="/about" 
+              className="relative text-gray-700 py-2 group"
+            >
               {t("nav.about")}
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
             </Link>
-            <Link to="/blog" className="text-gray-700 hover:text-blue-600 transition">
+            <Link 
+              to="/research-work" 
+              className="relative text-gray-700 py-2 group flex items-center gap-2"
+            >
+              <span>Research Work</span>
+              <span className="bg-red-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded uppercase leading-tight">New</span>
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
+            </Link>
+            <Link 
+              to="/blog" 
+              className="relative text-gray-700 py-2 group"
+            >
               {t("nav.blog")}
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
             </Link>
-            <Link to="/contact" className="text-gray-700 hover:text-blue-600 transition">
+            <Link 
+              to="/contact" 
+              className="relative text-gray-700 py-2 group"
+            >
               {t("nav.contact")}
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
             </Link>
             {isAuthenticated && (
               <>
                 {user?.isAdmin ? (
-                  <Link to="/admin" className="text-gray-700 hover:text-blue-600 transition">
+                  <Link 
+                    to="/admin" 
+                    className="relative text-gray-700 py-2 group"
+                  >
                     Admin Panel
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
                   </Link>
                 ) : (
-                  <Link to="/contribute" className="text-gray-700 hover:text-blue-600 transition">
+                  <Link 
+                    to="/contribute" 
+                    className="relative text-gray-700 py-2 group"
+                  >
                     {t("nav.contribute")}
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
                   </Link>
                 )}
               </>
@@ -304,49 +336,64 @@ const Navbar = () => {
         <div className="md:hidden px-2 pt-2 pb-3 space-y-1 bg-white shadow-md">
           <Link
             to="/"
-            className="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded"
+            className="relative block text-gray-700 px-3 py-2 rounded group"
             onClick={closeMenu}
           >
             {t("nav.home")}
+            <span className="absolute bottom-2 left-3 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-[calc(100%-1.5rem)]"></span>
           </Link>
           <Link
             to="/about"
-            className="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded"
+            className="relative block text-gray-700 px-3 py-2 rounded group"
             onClick={closeMenu}
           >
             {t("nav.about")}
+            <span className="absolute bottom-2 left-3 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-[calc(100%-1.5rem)]"></span>
+          </Link>
+          <Link
+            to="/research-work"
+            className="relative block text-gray-700 px-3 py-2 rounded group flex items-center gap-2"
+            onClick={closeMenu}
+          >
+            <span>Research Work</span>
+            <span className="bg-red-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded uppercase leading-tight">New</span>
+            <span className="absolute bottom-2 left-3 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-[calc(100%-1.5rem)]"></span>
           </Link>
           <Link
             to="/blog"
-            className="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded"
+            className="relative block text-gray-700 px-3 py-2 rounded group"
             onClick={closeMenu}
           >
             {t("nav.blog")}
+            <span className="absolute bottom-2 left-3 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-[calc(100%-1.5rem)]"></span>
           </Link>
           <Link
             to="/contact"
-            className="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded"
+            className="relative block text-gray-700 px-3 py-2 rounded group"
             onClick={closeMenu}
           >
             {t("nav.contact")}
+            <span className="absolute bottom-2 left-3 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-[calc(100%-1.5rem)]"></span>
           </Link>
           {isAuthenticated && (
             <>
               {user?.isAdmin ? (
                 <Link
                   to="/admin"
-                  className="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded"
+                  className="relative block text-gray-700 px-3 py-2 rounded group"
                   onClick={closeMenu}
                 >
                   Admin Panel
+                  <span className="absolute bottom-2 left-3 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-[calc(100%-1.5rem)]"></span>
                 </Link>
               ) : (
                 <Link
                   to="/contribute"
-                  className="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded"
+                  className="relative block text-gray-700 px-3 py-2 rounded group"
                   onClick={closeMenu}
                 >
                   {t("nav.contribute")}
+                  <span className="absolute bottom-2 left-3 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-[calc(100%-1.5rem)]"></span>
                 </Link>
               )}
             </>
